@@ -8,7 +8,8 @@ import webpack from 'webpack'
 import webpackDevMiddleware from 'webpack-dev-middleware'
 import webpackHotMiddleware from 'webpack-hot-middleware'
 
-import router from './router'
+import router from './routers/router'
+import pdf from './routers/pdf'
 import config from '../../webpack.config'
 
 const app = express()
@@ -35,6 +36,7 @@ app.use(webpackDevMiddleware(compiler, {
 app.use(webpackHotMiddleware(compiler))
 
 app.use('/', router)
+app.use('/pdf', pdf)
 
 // catch 404 and forward to error handler
 app.use(function(req, res, next) {

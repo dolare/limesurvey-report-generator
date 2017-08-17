@@ -11,6 +11,12 @@
     <div class='col-lg-5'>
       <button class='btn btn-block btn-success' :disabled="tableData == ''">Generate!</button>
     </div>
+    <div class='col-lg-6'>
+      <button class='btn btn-block btn-success' @click="generateFormBrowser" >generateFormBrowser!</button>
+    </div>
+    <div class='col-lg-6'>
+      <button class='btn btn-block btn-success' @click="generateFormServer" >generateFormServer!</button>
+    </div>
     <div class='col-lg-12 table-ctn' v-if="tableData !== ''">
       <table class="table table-bordered table-hover table-striped table-header-bg">
         <thead>
@@ -53,7 +59,9 @@
 </template>
 
 <script>
-import Babyparse from 'babyparse'
+// import Babyparse from 'babyparse'
+import filesaver from 'file-saver'
+import Jspdf from 'jspdf'
 
 export default {
   data () {
@@ -64,24 +72,19 @@ export default {
     }
   },
   methods: {
-    onFileChange(e) {
-      var files = e.target.files || e.dataTransfer.files
-      if (!files.length) {
-        return
-      }
-      this.fileName = files[0].name
-      this.createInput(files[0])
+    generateFormServer: function() {
+      this.$http.post('/pdf').then(response => {
+        this.sources = response.data
+        console.log(this.sources)
+        var blob = new Blob([this.sources], {type: 'application/pdf'})
+        filesaver.saveAs(blob, 'AwesomePDF')
+      })
     },
-    createInput(file) {
-      var reader = new FileReader()
-      var vm = this
-      reader.onload = (e) => {
-        vm.fileinput = Babyparse.parse(reader.result, { header: true })
-      }
-      reader.readAsText(file)
-    }
-  },
-  watch: {
+    generateFormBrowser: function() {
+      var doc = new Jspdf()
+      doc.text('hello world!', 10, 10)
+      doc.save('output.pdf')
+    },
     fileinput: function(value) {
       this.tableData = value.data
       console.log(this.tableData)
