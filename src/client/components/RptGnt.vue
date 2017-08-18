@@ -105,6 +105,7 @@ export default {
   watch: {
     fileinput: function(value) {
       this.tableData = value.data
+      this.tableData.pop()
       console.log(this.tableData)
     }
   }
