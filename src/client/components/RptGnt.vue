@@ -21,36 +21,36 @@
       <table class="table table-bordered table-hover table-striped table-header-bg">
         <thead>
           <tr>
-            <th class="text-center">date_created</th>
-            <th class="text-center">date_modified</th>
-            <th class="text-center">enabled</th>
-            <th class="text-center">fetch_error_count</th>
-            <th class="text-center">last_change_date</th>
-            <th class="text-center">last_check_date</th>
-            <th class="text-center">last_http_code</th>
-            <th class="text-center">last_reason</th>
-            <th class="text-center">object_id</th>
-            <th class="text-center">raw_content_checksum</th>
-            <th class="text-center">revision</th>
-            <th class="text-center">text_content_checksum</th>
-            <th class="text-center">url</th>
+            <th class="text-center">First Name</th>
+            <th class="text-center">Last Name</th>
+            <th class="text-center">Email</th>
+            <th class="text-center">Attribute 1</th>
+            <th class="text-center">Attribute 2</th>
+            <th class="text-center">Attribute 3</th>
+            <th class="text-center">Attribute 4</th>
+            <th class="text-center">Attribute 5</th>
+            <th class="text-center">Attribute 6</th>
+            <th class="text-center">Attribute 7</th>
+            <th class="text-center">Attribute 8</th>
+            <th class="text-center">Attribute 9</th>
+            <th class="text-center">Attribute 10</th>
           </tr>
         </thead>
         <tbody>
-          <tr v-for="dataRow in tableData">
-            <td class="text-center">{{ dataRow.object_id }}</td>
-            <td class="text-center">{{ dataRow.date_modified }}</td>
-            <td class="text-center">{{ dataRow.enabled }}</td>
-            <td class="text-center">{{ dataRow.fetch_error_count }}</td>
-            <td class="text-center">{{ dataRow.last_change_date }}</td>
-            <td class="text-center">{{ dataRow.last_check_date }}</td>
-            <td class="text-center">{{ dataRow.last_http_code }}</td>
-            <td class="text-center">{{ dataRow.last_reason }}</td>
-            <td class="text-center">{{ dataRow.object_id }}</td>
-            <td class="text-center">{{ dataRow.raw_content_checksum }}</td>
-            <td class="text-center">{{ dataRow.revision }}</td>
-            <td class="text-center">{{ dataRow.text_content_checksum }}</td>
-            <td class="text-center">{{ dataRow.url }}</td>
+          <tr v-for="rowData in tableData">
+            <td class="text-center">{{ rowData.firstname }}</td>
+            <td class="text-center">{{ rowData.lastname }}</td>
+            <td class="text-center">{{ rowData.email }}</td>
+            <td class="text-center">{{ rowData.attribute_1 }}</td>
+            <td class="text-center">{{ rowData.attribute_2 }}</td>
+            <td class="text-center">{{ rowData.attribute_3 }}</td>
+            <td class="text-center">{{ rowData.attribute_4 }}</td>
+            <td class="text-center">{{ rowData.attribute_5 }}</td>
+            <td class="text-center">{{ rowData.attribute_6 }}</td>
+            <td class="text-center">{{ rowData.attribute_7 }}</td>
+            <td class="text-center">{{ rowData.attribute_8 }}</td>
+            <td class="text-center">{{ rowData.attribute_9 }}</td>
+            <td class="text-center">{{ rowData.attribute_10 }}</td>
           </tr>
         </tbody>
       </table>
@@ -59,7 +59,7 @@
 </template>
 
 <script>
-// import Babyparse from 'babyparse'
+import Babyparse from 'babyparse'
 import filesaver from 'file-saver'
 import Jspdf from 'jspdf'
 
@@ -72,6 +72,22 @@ export default {
     }
   },
   methods: {
+    onFileChange(e) {
+      var files = e.target.files || e.dataTransfer.files
+      if (!files.length) {
+        return
+      }
+      this.fileName = files[0].name
+      this.createInput(files[0])
+    },
+    createInput(file) {
+      var reader = new FileReader()
+      var vm = this
+      reader.onload = (e) => {
+        vm.fileinput = Babyparse.parse(reader.result, { header: true })
+      }
+      reader.readAsText(file)
+    },
     generateFormServer: function() {
       this.$http.post('/pdf').then(response => {
         this.sources = response.data
@@ -84,7 +100,9 @@ export default {
       var doc = new Jspdf()
       doc.text('hello world!', 10, 10)
       doc.save('output.pdf')
-    },
+    }
+  },
+  watch: {
     fileinput: function(value) {
       this.tableData = value.data
       console.log(this.tableData)
