@@ -1,39 +1,28 @@
 import express from 'express'
+const PDFGenerator = require('./PDFGenerator')
 const PDFDocument = require('pdfkit');
 const fs = require('fs');
+const Promise = require('bluebird')
 
 const router = express.Router()
 
-router.post('/', function(req, res) {
-  console.log(1);
-  var doc = new PDFDocument()
-  //doc.pipe(fs.createWriteStream('output.pdf'))
-  doc.font('Times-Roman')
-    .fontSize(48)
-    .text('NodeJs PDF Document',100,100);
-  doc.addPage()
-    .fillColor("blue")
-    .text('Here is a link!', 100, 100)
-    .underline(100, 100, 160, 27, {color: "#0000FF"})
-    .link(100, 100, 160, 27, 'http://google.com/')
-
-  doc.addPage()
-    .fontSize(25)
-    .text('Here is some vector graphics...', 100, 100)
-  doc.save()
-    .moveTo(100, 150)
-   .lineTo(100, 250)
-   .lineTo(200, 250)
-   .fill("#FF3300") 
-  res.setHeader('Content-disposition', 'attachment; filename="output.pdf"');
-  res.setHeader('Content-type', 'application/pdf');
-  //res.download('output.pdf');
-  doc.font('Times-Roman')
-      .fontSize(48)
-      .text('NodeJs PDF Document',100,100);
-  console.log(2);  
-  doc.pipe(res)
-  doc.end()
+router.post('/generate', function(req, res) { 
+  PDFGenerator(1,2,3,4);
+  res.send('success');
 })
+
+router.post('/chart', function(req, res) {
+  var base64Data = req.body.data.replace(/^data:image\/png;base64,/,"");
+  fs.writeFileSync(__dirname + '/chart.png', base64Data, 'base64', function(err) {
+    console.log(err);
+  })
+  res.send('success');
+
+})
+
+router.get('/download', function(req, res, next) {
+  res.download(__dirname + '/output.pdf','output.pdf')
+})
+
 
 export default router
