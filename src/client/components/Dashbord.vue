@@ -30,7 +30,7 @@
                   </div>
                   <div class="block-content text-center">
                     <div class="push">
-                      <img class="img-avatar img-avatar96 img-avatar-thumb" src="assets/img/avatars/avatar10.jpg" alt="">
+                      <img class="img-avatar img-avatar96 img-avatar-thumb" alt="">
                     </div>
                     <!-- <h3 class="font-w300 text-white">Eric Lawson</h3> -->
                   </div>
@@ -68,6 +68,9 @@
           backgroundImage: 'url(' + titleBgImg + ')'
         },
         fnBlockBgStyle: {
+          backgroundImage: 'url(' + fnBlockBgImg + ')'
+        },
+        fnBlockInnerBlockStyle: {
           backgroundImage: 'url(' + fnBlockBgImg + ')'
         }
       }
