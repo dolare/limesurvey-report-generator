@@ -25,6 +25,7 @@ export default {
   .view-ctn {
     padding-top: 52px;
     min-height: 100%;
+    background-color: '#f9f9f9' !important
   }
 
   ::-webkit-scrollbar

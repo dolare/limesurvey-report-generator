@@ -10,7 +10,7 @@
         </label>
       </div>
       <div class='col-lg-5'>
-        <button class='btn btn-block btn-success' :disabled="tableData == ''">Generate!</button>
+        <button class='btn btn-block btn-info' :disabled="tableData == ''">Generate!</button>
       </div>
       <div class='col-lg-12 table-ctn' v-if="tableData !== ''">
         <table class="table table-bordered table-hover table-striped table-header-bg">
@@ -47,7 +47,7 @@
               <td class="text-center">{{ rowData.attribute_8 }}</td>
               <td class="text-center">{{ rowData.attribute_9 }}</td>
               <td class="text-center">{{ rowData.attribute_10 }}</td>
-              <td class="text-center"><button @click="download(index)">download</button></td>
+              <td class="text-center"><button class="btn btn-info" @click="download(index)">download</button></td>
             </tr>
           </tbody>
         </table>

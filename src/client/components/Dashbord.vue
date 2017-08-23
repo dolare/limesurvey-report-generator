@@ -2,7 +2,7 @@
   <div>
     <main>
       <!-- Page Header -->
-      <div class="bg-image overflow-hidden" style="background-image: url('assets/img/photos/photo31@2x.jpg');">
+      <div class="bg-image overflow-hidden" :style="titleBgStyle">
         <div class="bg-black-op">
           <div class="content content-narrow">
             <div class="block block-transparent">
@@ -22,7 +22,7 @@
         <div class="row">
           <div class="col-lg-6 col-lg-offset-3">
             <!-- Add Friend -->
-            <div class="bg-image" style="background-image: url('assets/img/photos/photo29.jpg');">
+            <div class="bg-image" :style="fnBlockBgStyle">
               <div class="bg-black-op">
                 <div class="block block-themed block-transparent">
                   <div class="block-header">
@@ -58,6 +58,19 @@
 </template>
 
 <script>
+  import titleBgImg from '../public/image/titleBgImg.jpg'
+  import fnBlockBgImg from '../public/image/fnBlockBgImg-rpt.jpg'
+
   export default {
+    data () {
+      return {
+        titleBgStyle: {
+          backgroundImage: 'url(' + titleBgImg + ')'
+        },
+        fnBlockBgStyle: {
+          backgroundImage: 'url(' + fnBlockBgImg + ')'
+        }
+      }
+    }
   }
 </script>
