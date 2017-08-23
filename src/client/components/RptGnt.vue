@@ -209,6 +209,8 @@ export default {
       info.id = this.tableData[index].id
       info.email = this.tableData[index].email
       info.time = this.tableData[index].interviewtime
+      info.province = this.tableData[index].attribute_2
+      info.city = this.tableData[index].attribute_3
 
       _.each(this.tableData[index], function(res) {
         if (res === 'A') {

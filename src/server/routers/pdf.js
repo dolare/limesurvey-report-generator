@@ -14,10 +14,12 @@ router.post('/generate', function(req, res) {
   var school = user.school;
   var id = user.id;
   var time = user.time;
-  var email = user.email
+  var email = user.email;
+  var province = user.province;
+  var city = user.city;
   var answer = req.body.answer;
   
-  PDFGenerator(time,name,school,id,email,answer).then(function(stream){
+  PDFGenerator(time,name,school,id,email,answer,province,city).then(function(stream){
     stream.on('finish', function(){
         console.log('stream finished');
         res.send('success');

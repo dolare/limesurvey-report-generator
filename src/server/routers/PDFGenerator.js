@@ -2,7 +2,7 @@ const PDFDocument = require('pdfkit');
 const fs = require('fs');
 const Q = require('q');
 
-var generator = function(time, name, school, id, email, answer){
+var generator = function(time, name, school, id, email, answer, province, city){
 
     return new Promise(function(resolve, reject){
         var passage_rule = {width:500, align: 'left', characterSpacing :3, lineGap: 5, paragraphGap: 6};
@@ -11,7 +11,7 @@ var generator = function(time, name, school, id, email, answer){
 
         const TIME = time;
         const NAME = name;
-        const SCHOOL = school;
+        const SCHOOL = province + city + school;
         const ID = id;
         const EMAIL = email;
         const PASSAGE1 = '本测评系统的制定对于幼儿园和中、小学教师的职业心理健康必备要求进行了规定和量化为幼儿园及中、小学教师的选拔及在岗职业心理健康的评估和督导提供有效的依据。时代心理人事测评中心以人格理论为基础结合国内外人事测量的方法运用“实证标准法”确定了教师需要具备的与教师心理健康直接相关联的心理特征。';
