@@ -113,7 +113,7 @@ export default {
       this.chart = echarts.init(this.$refs.myEchart)
       this.chart.setOption({
         title: {
-          text: 'title'
+          text: ''
         },
         tooltip: {
           trigger: 'axis',
@@ -128,6 +128,12 @@ export default {
         yAxis: {
           type: 'category',
           axisTick: {show: false},
+          axisLabel: {
+            textStyle: {
+              fontSize: 18,
+              color: '#000'
+            }
+          },
           data: ['压力应对', '角色定位', '群体管理策略', '情绪成熟度', '情绪调控', '重要他人', '理性自我认知', '主体意识引导策略']
         },
         series: [{
@@ -136,10 +142,14 @@ export default {
           barWidth: 30,
           label: {
             normal: {
-              shadow: true,
+              show: true,
               position: 'right',
               textStyle: {
-                color: '#000'
+                color: '#000',
+                fontSize: 16
+              },
+              formatter: function(data) {
+                return data.data.toFixed(2) * 100 + '%'
               }
             }
           },

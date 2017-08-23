@@ -150,7 +150,7 @@ var generator = function(time, name, school, id, email, answer){
             .font(__dirname + '/fonts/msyh.ttf')
             .fontSize(12)
             .text(PASSAGE3_1.slice(9), passage_rule);
-        doc.image(__dirname + '/chart.png',120,200,{width:450, height:300});
+        doc.image(__dirname + '/chart.png',100,160,{width:500, height:350});
         doc.font(__dirname + '/fonts/msyh.ttf')
             .fontSize(10)
             .text('    ' + PASSAGE3_2,80, 550, passage_rule)
