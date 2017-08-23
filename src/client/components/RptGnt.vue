@@ -47,7 +47,7 @@
               <td class="text-center">{{ rowData.attribute_8 }}</td>
               <td class="text-center">{{ rowData.attribute_9 }}</td>
               <td class="text-center">{{ rowData.attribute_10 }}</td>
-              <td class="text-center"><button class="btn btn-info" @click="download(index)">download</button></td>
+              <td class="text-center"><button class="btn btn-info" @click="download(index)">Download</button></td>
             </tr>
           </tbody>
         </table>
