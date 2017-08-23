@@ -4,13 +4,16 @@
       <h1 class="text-center push-30-t">Report Generator</h1>
       <div class='col-lg-5 col-lg-offset-1'>
         <label class='btn btn-block btn-default'>
-          <i class='fa fa-superpowers' aria-hidden='true'></i>
+          <i class='fa fa-upload' aria-hidden='true'></i>
           <input type='file' @change='onFileChange'>
           {{ fileName }}
         </label>
       </div>
       <div class='col-lg-5'>
-        <button class='btn btn-block btn-info' :disabled="tableData == ''">Generate!</button>
+        <button class='btn btn-block btn-info' :disabled="tableData == ''">
+          <i class='fa fa-superpowers' aria-hidden='true'></i>
+          Generate!
+        </button>
       </div>
       <div class='col-lg-12 table-ctn' v-if="tableData !== ''">
         <table class="table table-bordered table-hover table-striped table-header-bg">
@@ -296,6 +299,15 @@ export default {
     padding: 0 0;
     overflow-x: auto;
     overflow-y: auto;
+  }
+
+  div.table-ctn table tr td {
+    vertical-align: middle;
+  }
+
+
+  div.table-ctn table tr td button {
+    margin: 0px;
   }
 
 </style>
