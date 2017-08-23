@@ -7,21 +7,37 @@ const Promise = require('bluebird')
 const router = express.Router()
 
 router.post('/generate', function(req, res) { 
-  PDFGenerator(1,2,3,4);
-  res.send('success');
+  var user = req.body.userInfo;
+  console.log(user);
+  console.log(user.name);
+  var name = user.name;
+  var school = user.school;
+  var id = user.id;
+  var time = user.time;
+  var email = user.email
+  var answer = req.body.answer;
+  
+  PDFGenerator(time,name,school,id,email,answer).then(function(stream){
+    stream.on('finish', function(){
+        console.log('stream finished');
+        res.send('success');
+    })
+  },function(err){
+    console.log(err);
+  });
 })
 
 router.post('/chart', function(req, res) {
-  var base64Data = req.body.data.replace(/^data:image\/png;base64,/,"");
-  fs.writeFileSync(__dirname + '/chart.png', base64Data, 'base64', function(err) {
-    console.log(err);
+  var base64Data = req.body.data.dataURL.replace(/^data:image\/png;base64,/,"");
+  fs.writeFile(__dirname + '/chart.png', base64Data, 'base64', function(err) {
+    console.log(1);
+    res.send('success');
   })
-  res.send('success');
-
+  console.log(2);
 })
 
-router.get('/download', function(req, res, next) {
-  res.download(__dirname + '/output.pdf','output.pdf')
+router.get('/download/:email', function(req, res, next) {
+  res.download(__dirname + '/output.pdf', req.params.email + '.pdf')
 })
 
 

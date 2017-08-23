@@ -12,15 +12,6 @@
       <div class='col-lg-5'>
         <button class='btn btn-block btn-success' :disabled="tableData == ''">Generate!</button>
       </div>
-      <div class='col-lg-4'>
-        <button class='btn btn-block btn-success' @click="downloadFormServer" >downloadFormServer!</button>
-      </div>
-      <div class='col-lg-4'>
-        <button class='btn btn-block btn-success' @click="generateFormServer" >generateFormServer!</button>
-      </div>
-      <div class='col-lg-4'>
-        <button class='btn btn-block btn-success' @click="getChart">report chart generate</button>
-      </div>
       <div class='col-lg-12 table-ctn' v-if="tableData !== ''">
         <table class="table table-bordered table-hover table-striped table-header-bg">
           <thead>
@@ -28,20 +19,21 @@
               <th class="text-center">First Name</th>
               <th class="text-center">Last Name</th>
               <th class="text-center">Email</th>
-              <th class="text-center">Attribute 1</th>
-              <th class="text-center">Attribute 2</th>
-              <th class="text-center">Attribute 3</th>
-              <th class="text-center">Attribute 4</th>
-              <th class="text-center">Attribute 5</th>
-              <th class="text-center">Attribute 6</th>
-              <th class="text-center">Attribute 7</th>
-              <th class="text-center">Attribute 8</th>
-              <th class="text-center">Attribute 9</th>
-              <th class="text-center">Attribute 10</th>
+              <th class="text-center">cid</th>
+              <th class="text-center">province</th>
+              <th class="text-center">city</th>
+              <th class="text-center">region</th>
+              <th class="text-center">school</th>
+              <th class="text-center">ts</th>
+              <th class="text-center">gender</th>
+              <th class="text-center">nation</th>
+              <th class="text-center">id</th>
+              <th class="text-center">ct</th>
+              <th class="text-center">dowoload report</th>
             </tr>
           </thead>
           <tbody>
-            <tr v-for="rowData in tableData">
+            <tr v-for="(rowData, index) in tableData">
               <td class="text-center">{{ rowData.firstname }}</td>
               <td class="text-center">{{ rowData.lastname }}</td>
               <td class="text-center">{{ rowData.email }}</td>
@@ -55,6 +47,7 @@
               <td class="text-center">{{ rowData.attribute_8 }}</td>
               <td class="text-center">{{ rowData.attribute_9 }}</td>
               <td class="text-center">{{ rowData.attribute_10 }}</td>
+              <td class="text-center"><button @click="download(index)">download</button></td>
             </tr>
           </tbody>
         </table>
@@ -70,6 +63,7 @@
 import Babyparse from 'babyparse'
 import Jspdf from 'jspdf'
 import echarts from 'echarts'
+import _ from 'underscore'
 
 export default {
   data () {
@@ -78,7 +72,10 @@ export default {
       fileinput: '',
       tableData: '',
       dataURL: '',
-      chart: null
+      chart: null,
+      answer: {
+
+      }
     }
   },
   methods: {
@@ -116,7 +113,7 @@ export default {
       this.chart = echarts.init(this.$refs.myEchart)
       this.chart.setOption({
         title: {
-          text: 'ECharts Hello World'
+          text: 'title'
         },
         tooltip: {
           trigger: 'axis',
@@ -124,30 +121,55 @@ export default {
             type: 'shadow'
           }
         },
-        legend: {
-          data: ['2011']
-        },
-        grid: {
-          left: '%3',
-          right: '4%',
-          bottom: '3%',
-          containLabel: true
-        },
         xAxis: {
           type: 'value',
-          boundaryGap: [0, 0.01]
+          show: false
         },
         yAxis: {
           type: 'category',
-          data: [1, 2, 3, 4, 5, 6]
+          axisTick: {show: false},
+          data: ['压力应对', '角色定位', '群体管理策略', '情绪成熟度', '情绪调控', '重要他人', '理性自我认知', '主体意识引导策略']
         },
         series: [{
-          name: '2011',
+          name: '',
           type: 'bar',
-          data: [5000, 23220, 43236, 54310, 12350, 20521],
+          barWidth: 30,
+          label: {
+            normal: {
+              shadow: true,
+              position: 'right',
+              textStyle: {
+                color: '#000'
+              }
+            }
+          },
+          itemStyle: {
+            normal: {
+              color: '#3498db'
+            },
+            emphasis: '#2980b9'
+          },
           markLine: {
-            data: [{name: 'abc', value: '100%', yAxis: 1, xAxis: 40000}, {yAxis: 6, xAxis: 40000}]
-          }
+            symbolSize: '',
+            label: {
+              normal: {
+                show: true,
+                formatter: '100%'
+              }
+            },
+            lineStyle: {
+              normal: {
+                color: '#e74c3c',
+                width: 3,
+                type: 'solid'
+              }
+            },
+            data: [{
+              name: 'Y 轴值为 100 的水平线',
+              xAxis: 1
+            }]
+          },
+          data: [this.answer.A / 5, this.answer.B / 3, this.answer.C / 5, this.answer.D / 3, this.answer.E / 4, this.answer.F / 4, this.answer.G / 3, this.answer.H / 5]
         }]
       })
     },
@@ -157,12 +179,67 @@ export default {
       console.log(this.chart)
       console.log(this.dataURL)
     },
-    getChart: function() {
+    download: function(index) {
+      var answer = this.answer
+      answer.A = 0
+      answer.B = 0
+      answer.C = 0
+      answer.D = 0
+      answer.E = 0
+      answer.F = 0
+      answer.G = 0
+      answer.H = 0
+
+      var info = {}
+      info.name = this.tableData[index].lastname + this.tableData[index].firstname
+      info.school = this.tableData[index].attribute_5
+      info.id = this.tableData[index].id
+      info.email = this.tableData[index].email
+      info.time = this.tableData[index].interviewtime
+
+      _.each(this.tableData[index], function(res) {
+        if (res === 'A') {
+          answer.A++
+        }
+        if (res === 'B') {
+          answer.B++
+        }
+        if (res === 'C') {
+          answer.C++
+        }
+        if (res === 'D') {
+          answer.D++
+        }
+        if (res === 'E') {
+          answer.E++
+        }
+        if (res === 'F') {
+          answer.F++
+        }
+        if (res === 'G') {
+          answer.G++
+        }
+        if (res === 'H') {
+          answer.H++
+        }
+      })
+      this.answer = answer
       this.initChart()
       this.loadDataURL()
-      this.$http.post('/pdf/chart', {data: this.dataURL}).then(response => {
-        console.log('download ' + response.data)
-        console.log('')
+      console.log(this.tableData[index])
+      this.$http.post('/pdf/chart', {data: {
+        dataURL: this.dataURL,
+        answer: answer
+      }
+      }).then(response => {
+        console.log('generate chart ')
+        this.$http.post('/pdf/generate', {
+          userInfo: info,
+          answer: this.answer
+        }).then(response => {
+          console.log('generate pdf ')
+          window.open('/pdf/download/' + info.email)
+        })
       })
     }
   },
@@ -178,8 +255,9 @@ export default {
 
 <style scoped>
   .echarts{
-    height:400px;
-    width:600px;
+    height:600px;
+    width:800px;
+    margin:auto;
   }
   div.row {
     margin: 0 0;
