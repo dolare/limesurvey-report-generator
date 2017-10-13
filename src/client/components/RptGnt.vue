@@ -127,11 +127,11 @@ export default {
           axisTick: {show: false},
           axisLabel: {
             textStyle: {
-              fontSize: 18,
+              fontSize: 20,
               color: '#000'
             }
           },
-          data: ['压力应对', '角色定位', '群体管理策略', '情绪成熟度', '情绪调控', '重要他人', '理性自我认知', '主体意识引导策略']
+          data: ['压力应对', '角色定位', '管理策略', '情绪成熟度', '情绪调控', '重要他人', '自我认知', '主体意识']
         },
         series: [{
           name: '',
@@ -265,7 +265,7 @@ export default {
 <style scoped>
   .echarts{
     height:600px;
-    width:800px;
+    width:1100px;
     margin:auto;
   }
   div.row {
@@ -307,7 +307,6 @@ export default {
   }
 
   div.echarts {
-    visibility: hidden;
     position: fixed !important;
   }
 
