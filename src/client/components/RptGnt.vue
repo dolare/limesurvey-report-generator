@@ -4,10 +4,10 @@
       <h1 class="text-center push-30-t">Report Generator</h1>
       <div class='col-lg-10 col-lg-offset-1'>
         <label class='btn btn-block btn-info'>
-          <i class='fa fa-upload' aria-hidden='true'></i>
-          <input type='file' @change='onFileChange'>
-          {{ fileName }}
-        </label>
+            <i class='fa fa-upload' aria-hidden='true'></i>
+            <input type='file' @change='onFileChange'>
+            {{ fileName }}
+          </label>
       </div>
       <div class='col-lg-12 table-ctn' v-if="tableData !== ''">
         <table class="table table-bordered table-hover table-striped table-header-bg">
@@ -30,7 +30,7 @@
             </tr>
           </thead>
           <tbody>
-            <tr v-for="(rowData, index) in tableData">
+            <tr v-for="(rowData, index) in tableData" v-if="index != tableData.length - 1">
               <td class="text-center">{{ rowData.firstname }}</td>
               <td class="text-center">{{ rowData.lastname }}</td>
               <td class="text-center">{{ rowData.email }}</td>
@@ -51,237 +51,243 @@
       </div>
     </div>
     <div class="echarts" ref="myEchart">
-
+  
     </div>
   </div>
 </template>
 
 <script>
-import Babyparse from 'babyparse'
-import Jspdf from 'jspdf'
-import echarts from 'echarts'
-import _ from 'underscore'
-
-export default {
-  data () {
-    return {
-      fileName: 'Upload CSV File',
-      fileinput: '',
-      tableData: '',
-      dataURL: '',
-      chart: null,
-      answer: {
-
+  import Babyparse from 'babyparse'
+  import Jspdf from 'jspdf'
+  import echarts from 'echarts'
+  import _ from 'underscore'
+  
+  export default {
+    data() {
+      return {
+        fileName: 'Upload CSV File',
+        fileinput: '',
+        tableData: '',
+        dataURL: '',
+        chart: null,
+        answer: {
+  
+        }
       }
-    }
-  },
-  methods: {
-    onFileChange(e) {
-      var files = e.target.files || e.dataTransfer.files
-      if (!files.length) {
-        return
-      }
-      this.fileName = files[0].name
-      this.createInput(files[0])
     },
-    createInput(file) {
-      var reader = new FileReader()
-      var vm = this
-      reader.onload = (e) => {
-        vm.fileinput = Babyparse.parse(reader.result, { header: true })
-      }
-      reader.readAsText(file)
-    },
-    generateFormServer: function() {
-      this.$http.post('/pdf/generate').then(response => {
-        console.log('download ' + response.data)
-        console.log('')
-      })
-    },
-    downloadFormServer: function() {
-      window.open('/pdf/download')
-    },
-    generateFormBrowser: function() {
-      var doc = new Jspdf()
-      doc.text('hello world!', 10, 10)
-      doc.save('output.pdf')
-    },
-    initChart() {
-      this.chart = echarts.init(this.$refs.myEchart)
-      this.chart.setOption({
-        title: {
-          text: ''
-        },
-        tooltip: {
-          trigger: 'axis',
-          axisPointer: {
-            type: 'shadow'
-          }
-        },
-        xAxis: {
-          type: 'value',
-          show: false
-        },
-        yAxis: {
-          type: 'category',
-          axisTick: {show: false},
-          axisLabel: {
-            textStyle: {
-              fontSize: 20,
-              color: '#000'
+    methods: {
+      onFileChange(e) {
+        var files = e.target.files || e.dataTransfer.files
+        if (!files.length) {
+          return
+        }
+        this.fileName = files[0].name
+        this.createInput(files[0])
+      },
+      createInput(file) {
+        var reader = new FileReader()
+        var vm = this
+        reader.onload = (e) => {
+          vm.fileinput = Babyparse.parse(reader.result, {
+            header: true
+          })
+        }
+        reader.readAsText(file)
+      },
+      generateFormServer: function() {
+        this.$http.post('/pdf/generate').then(response => {
+          console.log('download ' + response.data)
+          console.log('')
+        })
+      },
+      downloadFormServer: function() {
+        window.open('/pdf/download')
+      },
+      generateFormBrowser: function() {
+        var doc = new Jspdf()
+        doc.text('hello world!', 10, 10)
+        doc.save('output.pdf')
+      },
+      initChart() {
+        this.chart = echarts.init(this.$refs.myEchart)
+        this.chart.setOption({
+          title: {
+            text: ''
+          },
+          tooltip: {
+            trigger: 'axis',
+            axisPointer: {
+              type: 'shadow'
             }
           },
-          data: ['压力应对', '角色定位', '管理策略', '情绪成熟度', '情绪调控', '重要他人', '自我认知', '主体意识']
-        },
-        series: [{
-          name: '',
-          type: 'bar',
-          barWidth: 30,
-          label: {
-            normal: {
-              show: true,
-              position: 'right',
-              textStyle: {
-                color: '#000',
-                fontSize: 16
-              },
-              formatter: function(data) {
-                return data.data.toFixed(2) * 100 + '%'
-              }
-            }
+          xAxis: {
+            type: 'value',
+            show: false
           },
-          itemStyle: {
-            normal: {
-              color: '#3498db'
+          yAxis: {
+            type: 'category',
+            axisTick: {
+              show: false
             },
-            emphasis: '#2980b9'
+            axisLabel: {
+              textStyle: {
+                fontSize: 20,
+                color: '#000'
+              }
+            },
+            data: ['压力应对', '角色定位', '管理策略', '情绪成熟度', '情绪调控', '重要他人', '自我认知', '主体意识']
           },
-          markLine: {
-            symbolSize: '',
+          series: [{
+            name: '',
+            type: 'bar',
+            barWidth: 30,
             label: {
               normal: {
                 show: true,
-                formatter: '100%'
+                position: 'right',
+                textStyle: {
+                  color: '#000',
+                  fontSize: 16
+                },
+                formatter: function(data) {
+                  return data.data.toFixed(2) * 100 + '%'
+                }
               }
             },
-            lineStyle: {
+            itemStyle: {
               normal: {
-                color: '#e74c3c',
-                width: 3,
-                type: 'solid'
-              }
+                color: '#3498db'
+              },
+              emphasis: '#2980b9'
             },
-            data: [{
-              name: 'Y 轴值为 100 的水平线',
-              xAxis: 1
-            }]
-          },
-          data: [this.answer.A / 5, this.answer.B / 3, this.answer.C / 5, this.answer.D / 3, this.answer.E / 4, this.answer.F / 4, this.answer.G / 3, this.answer.H / 5]
-        }]
-      })
-    },
-    loadDataURL: function() {
-      this.dataURL = this.chart.getDataURL()
-      console.log(1)
-      console.log(this.chart)
-      console.log(this.dataURL)
-    },
-    download: function(index) {
-      var answer = this.answer
-      answer.A = 0
-      answer.B = 0
-      answer.C = 0
-      answer.D = 0
-      answer.E = 0
-      answer.F = 0
-      answer.G = 0
-      answer.H = 0
-
-      var info = {}
-      info.name = this.tableData[index].lastname + this.tableData[index].firstname
-      info.school = this.tableData[index].attribute_5
-      info.id = this.tableData[index].id
-      info.email = this.tableData[index].email
-      info.time = this.tableData[index].interviewtime
-      info.province = this.tableData[index].attribute_2
-      info.city = this.tableData[index].attribute_3
-
-      _.each(this.tableData[index], function(res) {
-        if (res === 'A') {
-          answer.A++
-        }
-        if (res === 'B') {
-          answer.B++
-        }
-        if (res === 'C') {
-          answer.C++
-        }
-        if (res === 'D') {
-          answer.D++
-        }
-        if (res === 'E') {
-          answer.E++
-        }
-        if (res === 'F') {
-          answer.F++
-        }
-        if (res === 'G') {
-          answer.G++
-        }
-        if (res === 'H') {
-          answer.H++
-        }
-      })
-      this.answer = answer
-      this.initChart()
-      this.loadDataURL()
-      console.log(this.tableData[index])
-      this.$http.post('/pdf/chart', {data: {
-        dataURL: this.dataURL,
-        answer: answer
-      }
-      }).then(response => {
-        console.log('generate chart ')
-        this.$http.post('/pdf/generate', {
-          userInfo: info,
-          answer: this.answer
-        }).then(response => {
-          console.log('generate pdf ')
-          window.open('/pdf/download/' + info.email)
+            markLine: {
+              symbolSize: '',
+              label: {
+                normal: {
+                  show: true,
+                  formatter: '100%'
+                }
+              },
+              lineStyle: {
+                normal: {
+                  color: '#e74c3c',
+                  width: 3,
+                  type: 'solid'
+                }
+              },
+              data: [{
+                name: 'Y 轴值为 100 的水平线',
+                xAxis: 1
+              }]
+            },
+            data: [this.answer.A / 5, this.answer.B / 3, this.answer.C / 5, this.answer.D / 3, this.answer.E / 4, this.answer.F / 4, this.answer.G / 3, this.answer.H / 5]
+          }]
         })
-      })
-    }
-  },
-  watch: {
-    fileinput: function(value) {
-      this.tableData = value.data
-      this.tableData.pop()
-      console.log(this.tableData)
+      },
+      loadDataURL: function() {
+        this.dataURL = this.chart.getDataURL()
+        console.log(1)
+        console.log(this.chart)
+        console.log(this.dataURL)
+      },
+      download: function(index) {
+        var answer = this.answer
+        answer.A = 0
+        answer.B = 0
+        answer.C = 0
+        answer.D = 0
+        answer.E = 0
+        answer.F = 0
+        answer.G = 0
+        answer.H = 0
+  
+        var info = {}
+        info.name = this.tableData[index].lastname + this.tableData[index].firstname
+        info.school = this.tableData[index].attribute_5
+        info.id = this.tableData[index].id
+        info.email = this.tableData[index].email
+        info.time = this.tableData[index].interviewtime
+        info.province = this.tableData[index].attribute_2
+        info.city = this.tableData[index].attribute_3
+  
+        _.each(this.tableData[index], function(res) {
+          if (res === 'A') {
+            answer.A++
+          }
+          if (res === 'B') {
+            answer.B++
+          }
+          if (res === 'C') {
+            answer.C++
+          }
+          if (res === 'D') {
+            answer.D++
+          }
+          if (res === 'E') {
+            answer.E++
+          }
+          if (res === 'F') {
+            answer.F++
+          }
+          if (res === 'G') {
+            answer.G++
+          }
+          if (res === 'H') {
+            answer.H++
+          }
+        })
+        this.answer = answer
+        this.initChart()
+        this.loadDataURL()
+        console.log(this.tableData[index])
+        this.$http.post('/pdf/chart', {
+          data: {
+            dataURL: this.dataURL,
+            answer: answer
+          }
+        }).then(response => {
+          console.log('generate chart ')
+          this.$http.post('/pdf/generate', {
+            userInfo: info,
+            answer: this.answer
+          }).then(response => {
+            console.log('generate pdf ')
+            window.open('/pdf/download/' + info.email)
+          })
+        })
+      }
+    },
+    watch: {
+      fileinput: function(value) {
+        this.tableData = value.data
+        this.tableData.pop()
+        console.log(this.tableData)
+      }
     }
   }
-}
 </script>
 
 <style scoped>
-  .echarts{
-    height:600px;
-    width:1100px;
-    margin:auto;
+  .echarts {
+    height: 600px;
+    width: 1100px;
+    margin: auto;
   }
+  
   div.row {
     margin: 0 0;
     height: 100%;
   }
-
+  
   label {
     position: relative;
     margin: 20px auto;
   }
-
+  
   button {
     margin: 20px auto;
   }
-
+  
   input {
     position: absolute;
     top: 0;
@@ -290,24 +296,22 @@ export default {
     height: 100%;
     cursor: pointer;
   }
-
+  
   div.table-ctn {
     padding: 0 0;
     overflow-x: auto;
     overflow-y: auto;
   }
-
+  
   div.table-ctn table tr td {
     vertical-align: middle;
   }
-
-
+  
   div.table-ctn table tr td button {
     margin: 0px;
   }
-
+  
   div.echarts {
     position: fixed !important;
   }
-
 </style>
