@@ -1,7 +1,7 @@
 <template>
   <div>
     <div class='row'>
-      <h1 class="text-center push-30-t">Report Generator</h1>
+      <h1 class="text-center push-30-t">时代心理:教师测评（32题）报告生成工具r</h1>
       <div class='col-lg-10 col-lg-offset-1'>
         <label class='btn btn-block btn-info'>
             <i class='fa fa-upload' aria-hidden='true'></i>
