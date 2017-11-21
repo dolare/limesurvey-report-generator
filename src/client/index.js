@@ -3,7 +3,6 @@ import Router from 'vue-router'
 import VueResource from 'vue-resource'
 
 import App from './App'
-import Dashbord from './components/Dashbord'
 import RptGnt from './components/RptGnt'
 
 Vue.config.debug = true
@@ -12,8 +11,7 @@ Vue.use(VueResource)
 
 const router = new Router({
   routes: [
-    { name: 'dashBord', path: '/', component: Dashbord },
-    { name: 'rptGnt', path: '/rptgnt', component: RptGnt }
+    { name: 'rptGnt', path: '/', component: RptGnt }
   ]
 })
 
