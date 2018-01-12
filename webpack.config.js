@@ -56,11 +56,15 @@ module.exports = {
   node: {
     fs: 'empty'
   },
-  devtool: 'eval-source-map',
   eslint: {
     formatter: require('eslint-friendly-formatter')
   },
   plugins: [
-    new webpack.HotModuleReplacementPlugin()
+    new webpack.optimize.OccurenceOrderPlugin(),
+    new webpack.optimize.UglifyJsPlugin({
+      compressor: {
+        warnings: false
+      }
+    })   
   ]
 }
