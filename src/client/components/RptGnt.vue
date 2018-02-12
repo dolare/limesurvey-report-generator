@@ -50,7 +50,7 @@
         </table>
       </div>
     </div>
-    <div class="echarts" ref="myEchart" style="display:none">
+    <div class="echarts" ref="myEchart" style="">
     </div>
   </div>
 </template>
